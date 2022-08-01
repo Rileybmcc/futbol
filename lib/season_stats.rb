@@ -1,7 +1,7 @@
 module SeasonStats
 
   def list_game_ids_by_season(season_desired) #every game_id associated with a season
-    season_dsrd = @games.select { |game| game[:season] == season_desired }
+    season_dsrd = @games.data.select { |game| game[:season] == season_desired }
     gretzy = []
     season_dsrd.each do |game|
       gretzy << game[:game_id]
@@ -15,7 +15,7 @@ module SeasonStats
     percent_won = {}
 
     list_game_ids_by_season(season_desired).each do |num| 
-      stanley = @game_teams.select { |thing| thing[:game_id] == num }
+      stanley = @game_teams.data.select { |thing| thing[:game_id] == num }
       stanley.each do |half|
         if half[:result] == "WIN"
           games_won[half[:head_coach]] += 1
@@ -46,7 +46,7 @@ module SeasonStats
     @team_shot_percentage_1 = Hash.new
     list_game_ids_by_season(season_desired).each do |num|
 
-      wayne = @game_teams.select { |thing| thing[:game_id] == num }
+      wayne = @game_teams.data.select { |thing| thing[:game_id] == num }
       wayne.each do |period|
         @team_shots_1[period[:team_id]] += period[:shots].to_i
         @team_goals_1[period[:team_id]] += period[:goals].to_i
@@ -60,36 +60,36 @@ module SeasonStats
 
   def most_accurate_team(season_desired)
     wasd = team_accuracy(season_desired).max_by { |_a, b| b }
-    (@teams.find { |this_team| this_team[:team_id] == wasd[0]})[:team_name]
+    (@teams.data.find { |this_team| this_team[:team_id] == wasd[0]})[:team_name]
   end
 
   def least_accurate_team(season_desired)
     johnny = team_accuracy(season_desired).min_by { |_a, b| b }
-    (@teams.find { |this_team_1| this_team_1[:team_id] == johnny[0]})[:team_name]
+    (@teams.data.find { |this_team_1| this_team_1[:team_id] == johnny[0]})[:team_name]
   end
 
   def most_tackles(season_desired)
     team_tackles_2 = Hash.new(0)
     list_game_ids_by_season(season_desired).each do |num|
-      orr = @game_teams.select { |thing| thing[:game_id] == num }
+      orr = @game_teams.data.select { |thing| thing[:game_id] == num }
       orr.each do |period|
         team_tackles_2[period[:team_id]] += period[:tackles].to_i
       end
     end
     bobby = team_tackles_2.max_by { |_a, b| b }
-    (@teams.find { |this_team_2| this_team_2[:team_id] == bobby[0]})[:team_name]
+    (@teams.data.find { |this_team_2| this_team_2[:team_id] == bobby[0]})[:team_name]
 
   end
 
   def fewest_tackles(season_desired)
     team_tackles_3 = Hash.new(0)
     list_game_ids_by_season(season_desired).each do |num|
-      orr = @game_teams.select { |thing| thing[:game_id] == num }
+      orr = @game_teams.data.select { |thing| thing[:game_id] == num }
       orr.each do |period|
         team_tackles_3[period[:team_id]] += period[:tackles].to_i
       end
     end
     bobby = team_tackles_3.min_by { |_a, b| b }
-    (@teams.find { |this_team_3| this_team_3[:team_id] == bobby[0]})[:team_name]
+    (@teams.data.find { |this_team_3| this_team_3[:team_id] == bobby[0]})[:team_name]
   end
 end
