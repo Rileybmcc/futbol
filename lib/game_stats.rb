@@ -52,3 +52,4 @@ module GameStats
     game[:home_goals].to_i - game[:away_goals].to_i
   end
 end
+

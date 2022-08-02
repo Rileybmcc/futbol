@@ -56,7 +56,7 @@ RSpec.describe StatTracker do
     expect(@stat_tracker.average_goals_per_game).to eq 4.22
   end
 
-  it "#average_goals_by_season" do
+  xit "#average_goals_by_season" do
     expected = {
       "20122013"=>4.12,
       "20162017"=>4.23,
@@ -70,6 +70,10 @@ RSpec.describe StatTracker do
 
   it "#count_of_teams" do
     expect(@stat_tracker.count_of_teams).to eq 32
+  end
+
+  it "#team_ids" do
+    expect(@stat_tracker.team_ids).to eq ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "52", "53", "54"]
   end
 
   it "#best_offense" do

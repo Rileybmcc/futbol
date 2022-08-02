@@ -1,4 +1,5 @@
 require 'csv'
+
 require_relative './game_stats'
 require_relative './league_stats'
 require_relative './season_stats'
@@ -21,4 +22,5 @@ class StatTracker
   def self.from_csv(locations)
     StatTracker.new(locations)
   end
+  
 end
