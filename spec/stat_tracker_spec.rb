@@ -72,6 +72,10 @@ RSpec.describe StatTracker do
     expect(@stat_tracker.count_of_teams).to eq 32
   end
 
+  it "#team_ids" do
+    expect(@stat_tracker.team_ids).to eq ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "52", "53", "54"]
+  end
+
   it "#best_offense" do
     expect(@stat_tracker.best_offense).to eq "Reign FC"
   end

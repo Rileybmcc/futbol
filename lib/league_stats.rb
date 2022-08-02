@@ -4,146 +4,67 @@ module LeagueStats
     @teams.count
   end
 
+  def team_ids
+     ((@games.map { |game| game[:home_team_id] }) + (@games.map { |game| game[:away_team_id] })).uniq.sort_by(&:to_i)
+  end
+
   def best_offense
-    teams = ((@games.map { |game| game[:home_team_id] }) + (@games.map { |game| game[:away_team_id] })).uniq.sort_by(&:to_i)
     avgs = []
-    teams.each do |team|
+    team_ids.each do |team|
       home_goal = (@games.find_all { |game| team == game[:home_team_id] }.map { |game| game[:home_goals].to_i }).sum
       away_goal = (@games.find_all { |game| team == game[:away_team_id] }.map { |game| game[:away_goals].to_i }).sum
       avgs << ((home_goal + away_goal).to_f / (@games.count { |game| (game[:home_team_id || :away_team_id]) == team })).round(3)
     end
-    @teams.find { |team| team[:team_id] == (Hash[teams.zip(avgs)].max_by { |_k, v| v })[0] }[:team_name]
+    @teams.find { |team| team[:team_id] == (Hash[team_ids.zip(avgs)].max_by { |id, v| v })[0] }[:team_name]
   end
-
+  
   def worst_offense
-    teams = ((@games.map { |game| game[:home_team_id] }) + (@games.map { |game| game[:away_team_id] })).uniq.sort_by { |num| num.to_i }
     avgs = []
-    teams.each do |team|
+    team_ids.each do |team|
       home_goal = (@games.find_all { |game| team == game[:home_team_id]}.map { |game| game[:home_goals].to_i}).sum
       away_goal = (@games.find_all { |game| team == game[:away_team_id]}.map { |game| game[:away_goals].to_i}).sum
       avgs << ((home_goal + away_goal).to_f / (@games.find_all { |game| game[:home_team_id] == team || game[:away_team_id] == team}).count).round(3)
     end
-    @teams.find { |team| team[:team_id] == (Hash[teams.zip(avgs)].min_by { |_k, v| v })[0] }[:team_name]
+    @teams.find { |team| team[:team_id] == (Hash[team_ids.zip(avgs)].min_by { |id, v| v })[0] }[:team_name]
   end
 
   def highest_scoring_visitor
-    teams = (@games.map { |game| game[:away_team_id] }).uniq.sort_by { |num| num.to_i }
     avgs = []
-     teams.each do |team|
+    team_ids.each do |team|
       away_goal = (@games.find_all { |game| team == game[:away_team_id]}.map { |game| game[:away_goals].to_i}).sum
       avgs << ((away_goal).to_f / (@games.find_all { |game| game[:away_team_id] == team}).count).round(3)
     end
-    highest_visitor = (Hash[teams.zip(avgs)].max_by { |_k, v| v })[0]
+    highest_visitor = (Hash[team_ids.zip(avgs)].max_by { |id, v| v })[0]
     @teams.find { |team| team[:team_id] == highest_visitor }[:team_name]
   end
 
   def highest_scoring_home_team
-    teams = (@games.map { |game| game[:home_team_id] }).uniq.sort_by { |num| num.to_i }
     avgs = []
-     teams.each do |team|
+     team_ids.each do |team|
       home_goal = (@games.find_all { |game| team == game[:home_team_id]}.map { |game| game[:home_goals].to_i}).sum
       avgs << ((home_goal).to_f / (@games.find_all { |game| game[:home_team_id] == team}).count).round(3)
     end
-    highest_home_team = (Hash[teams.zip(avgs)].max_by { |_k, v| v })[0]
+    highest_home_team = (Hash[team_ids.zip(avgs)].max_by { |id, v| v })[0]
     @teams.find { |team| team[:team_id] == highest_home_team }[:team_name]
   end
 
   def lowest_scoring_visitor
-    teams = (@games.map { |game| game[:away_team_id] }).uniq.sort_by { |num| num.to_i }
     avgs = []
-    teams.each do |team|
+    team_ids.each do |team|
       away_goal = (@games.find_all { |game| team == game[:away_team_id]}.map { |game| game[:away_goals].to_i}).sum
       avgs << ((away_goal).to_f / (@games.find_all { |game| game[:away_team_id] == team}).count).round(3)
     end
-    lowest_visitor = (Hash[teams.zip(avgs)].min_by { |_k, v| v })[0]
+    lowest_visitor = (Hash[team_ids.zip(avgs)].min_by { |id, v| v })[0]
     @teams.find { |team| team[:team_id] == lowest_visitor }[:team_name]
   end
 
   def lowest_scoring_home_team
-    teams = (@games.map { |game| game[:home_team_id] }).uniq.sort_by { |num| num.to_i }
     avgs = []
-    teams.each do |team|
+    team_ids.each do |team|
       home_goal = (@games.find_all { |game| team == game[:home_team_id]}.map { |game| game[:home_goals].to_i}).sum
       avgs << ((home_goal).to_f / (@games.find_all { |game| game[:home_team_id] == team}).count).round(3)
     end
-    lowest_home_team = (Hash[teams.zip(avgs)].min_by { |_k, v| v })[0]
+    lowest_home_team = (Hash[team_ids.zip(avgs)].min_by { |id, v| v })[0]
     @teams.find { |team| team[:team_id] == lowest_home_team }[:team_name]
   end
-end
-=======
-class LeagueStats
-    attr_reader :game,
-                :teams
-
-    def initialize(games, teams)
-        @games = games
-        @teams = teams
-    end
-
-    def best_offense
-        teams = ((@games.map { |game| game[:home_team_id] }) + (@games.map { |game| game[:away_team_id] })).uniq.sort_by(&:to_i)
-        avgs = []
-        teams.each do |team|
-        home_goal = (@games.find_all { |game| team == game[:home_team_id] }.map { |game| game[:home_goals].to_i }).sum
-        away_goal = (@games.find_all { |game| team == game[:away_team_id] }.map { |game| game[:away_goals].to_i }).sum
-        avgs << ((home_goal + away_goal).to_f / (@games.count { |game| (game[:home_team_id || :away_team_id]) == team })).round(3)
-        end
-        @teams.find { |team| team[:team_id] == (Hash[teams.zip(avgs)].max_by { |_k, v| v })[0] }[:team_name]
-    end
-
-    def worst_offense
-        teams = ((@games.map { |game| game[:home_team_id] }) + (@games.map { |game| game[:away_team_id] })).uniq.sort_by { |num| num.to_i }
-        avgs = []
-        teams.each do |team|
-        home_goal = (@games.find_all { |game| team == game[:home_team_id]}.map { |game| game[:home_goals].to_i}).sum
-        away_goal = (@games.find_all { |game| team == game[:away_team_id]}.map { |game| game[:away_goals].to_i}).sum
-        avgs << ((home_goal + away_goal).to_f / (@games.find_all { |game| game[:home_team_id] == team || game[:away_team_id] == team}).count).round(3)
-        end
-        @teams.find { |team| team[:team_id] == (Hash[teams.zip(avgs)].min_by { |_k, v| v })[0] }[:team_name]
-    end
-
-    def highest_scoring_visitor
-        teams = (@games.map { |game| game[:away_team_id] }).uniq.sort_by { |num| num.to_i }
-        avgs = []
-        teams.each do |team|
-        away_goal = (@games.find_all { |game| team == game[:away_team_id]}.map { |game| game[:away_goals].to_i}).sum
-        avgs << ((away_goal).to_f / (@games.find_all { |game| game[:away_team_id] == team}).count).round(3)
-        end
-        highest_visitor = (Hash[teams.zip(avgs)].max_by { |_k, v| v })[0]
-        @teams.find { |team| team[:team_id] == highest_visitor }[:team_name]
-    end
-
-    def highest_scoring_home_team
-        teams = (@games.map { |game| game[:home_team_id] }).uniq.sort_by { |num| num.to_i }
-        avgs = []
-        teams.each do |team|
-        home_goal = (@games.find_all { |game| team == game[:home_team_id]}.map { |game| game[:home_goals].to_i}).sum
-        avgs << ((home_goal).to_f / (@games.find_all { |game| game[:home_team_id] == team}).count).round(3)
-        end
-        highest_home_team = (Hash[teams.zip(avgs)].max_by { |_k, v| v })[0]
-        @teams.find { |team| team[:team_id] == highest_home_team }[:team_name]
-    end
-
-    def lowest_scoring_visitor
-        teams = (@games.map { |game| game[:away_team_id] }).uniq.sort_by { |num| num.to_i }
-        avgs = []
-        teams.each do |team|
-        away_goal = (@games.find_all { |game| team == game[:away_team_id]}.map { |game| game[:away_goals].to_i}).sum
-        avgs << ((away_goal).to_f / (@games.find_all { |game| game[:away_team_id] == team}).count).round(3)
-        end
-        lowest_visitor = (Hash[teams.zip(avgs)].min_by { |_k, v| v })[0]
-        @teams.find { |team| team[:team_id] == lowest_visitor }[:team_name]
-    end
-
-    def lowest_scoring_home_team
-        teams = (@games.map { |game| game[:home_team_id] }).uniq.sort_by { |num| num.to_i }
-        avgs = []
-        teams.each do |team|
-        home_goal = (@games.find_all { |game| team == game[:home_team_id]}.map { |game| game[:home_goals].to_i}).sum
-        avgs << ((home_goal).to_f / (@games.find_all { |game| game[:home_team_id] == team}).count).round(3)
-        end
-        lowest_home_team = (Hash[teams.zip(avgs)].min_by { |_k, v| v })[0]
-        @teams.find { |team| team[:team_id] == lowest_home_team }[:team_name]
-    end
-
 end
