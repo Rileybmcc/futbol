@@ -48,21 +48,15 @@ module TeamStats
 
   # #fav & #rival helper method
   def win_hash(team_id)
+    games_against_counter = Hash.new(0)
     wins = @games.data.reduce(Hash.new(0)) do |hash, game|
-      (hash[game[:away_team_id]] += 1) if home_win?(team_id, game)
-      (hash[game[:home_team_id]] += 1) if away_win?(team_id, game)
+      hash[game[:away_team_id]] += 1 if home_win?(team_id, game)
+      hash[game[:home_team_id]] += 1 if away_win?(team_id, game)
+      games_against_counter[game[:away_team_id]] += 1 if home?(team_id, game)
+      games_against_counter[game[:home_team_id]] += 1 if away?(team_id, game)
       hash
     end
-    Hash[wins.map { |k, v| [k, v / games_against_counter(team_id)[k].to_f] }]
-  end
-
-  # #win_hash helper method
-  def games_against_counter(team_id)
-    @games.data.reduce(Hash.new(0)) do |hash, game|
-      hash[game[:away_team_id]] += 1 if home?(team_id, game)
-      hash[game[:home_team_id]] += 1 if away?(team_id, game)
-      hash
-    end
+    Hash[wins.map { |k, v| [k, v / games_against_counter[k].to_f] }]
   end
 
   def home_win?(team_id, game)
