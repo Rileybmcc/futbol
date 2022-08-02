@@ -40,6 +40,7 @@ module SeasonStats
   def coach_win_percentages_by_season(season_desired)
     games_won = Hash.new(0)
     games_played = Hash.new(0)
+
     placeholder = list_game_ids_by_season(season_desired)
     @game_teams.data.select { |thing| placeholder.include?(thing[:game_id])}.each do |half|
       games_played[half[:head_coach]] += 1
@@ -53,6 +54,7 @@ module SeasonStats
   def team_accuracy(season_desired)
     team_shots_1 = Hash.new(0)
     team_goals_1 = Hash.new(0)
+
     placeholder = list_game_ids_by_season(season_desired)
     @game_teams.data.select { |thing| placeholder.include?(thing[:game_id])}.each do |period|
       team_shots_1[period[:team_id]] += period[:shots].to_i
