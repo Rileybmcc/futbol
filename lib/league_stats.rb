@@ -1,7 +1,7 @@
 module LeagueStats
 
   def count_of_teams
-    @teams.count
+    @teams.data.count
   end
 
   def team_ids

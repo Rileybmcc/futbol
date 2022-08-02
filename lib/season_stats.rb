@@ -2,8 +2,8 @@ module SeasonStats
 
   def list_game_ids_by_season(season_desired)
     (@games.select { |game| game[:season] == season_desired }).map { |matchup| matchup[:game_id] }
-  end
 
+  end
 
   def winningest_coach(season_desired)
     coach_win_percentages_by_season(season_desired).max_by {|a, b| b }[0]
@@ -12,7 +12,6 @@ module SeasonStats
   def worst_coach(season_desired)
     coach_win_percentages_by_season(season_desired).min_by {|a, b| b }[0]
   end
-
 
   def most_accurate_team(season_desired)
     wasd = team_accuracy(season_desired).max_by { |a, b| b }
@@ -72,7 +71,7 @@ module SeasonStats
   def total_tackles(season_desired)
     team_tackles = Hash.new(0)
     list_game_ids_by_season(season_desired).each do |num|
-      orr = @game_teams.select { |thing| thing[:game_id] == num }
+      orr = @game_teams.data.select { |thing| thing[:game_id] == num }
       orr.each do |period|
         team_tackles[period[:team_id]] += period[:tackles].to_i
       end
