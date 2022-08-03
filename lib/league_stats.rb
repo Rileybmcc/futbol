@@ -5,19 +5,22 @@ module LeagueStats
   end
 
   def team_ids
-     ((@games.data.map { |game| game[:home_team_id] }) + (@games.data.map { |game| game[:away_team_id] })).uniq.sort_by(&:to_i)
+     ((@games.data.flat_map { |game| [game[:home_team_id], game[:away_team_id]] })).uniq.sort_by(&:to_i)
   end
 
   def best_offense
-    avgs = []
-    team_ids.each do |team|
-      home_goal = (@games.data.find_all { |game| team == game[:home_team_id] }.map { |game| game[:home_goals].to_i }).sum
-      away_goal = (@games.data.find_all { |game| team == game[:away_team_id] }.map { |game| game[:away_goals].to_i }).sum
-      avgs << ((home_goal + away_goal).to_f / (@games.data.count { |game| (game[:home_team_id || :away_team_id]) == team })).round(3)
+    games_played = Hash.new(0)
+    goals = @games.data.reduce(Hash.new(0)) do |hash, game|
+      hash[game[:home_team_id]] += game[:home_goals].to_i
+      hash[game[:away_team_id]] += game[:away_goals].to_i
+      games_played[game[:home_team_id]] += 1
+      games_played[game[:away_team_id]] += 1
+      hash
     end
-    @teams.data.find { |team| team[:team_id] == (Hash[team_ids.zip(avgs)].max_by { |_id, v| v })[0] }[:team_name]
+    avgs = Hash[games_played.map { |k, v| [k, (goals[k] / v.to_f).round(3)] }]
+    @teams.data.find { |team| team[:team_id] == (avgs.max_by { |_id, v| v })[0] }[:team_name]
   end
-  
+
   def worst_offense
     avgs = []
     team_ids.each do |team|
