@@ -151,22 +151,30 @@ RSpec.describe StatTracker do
   end
 
   it "#most_accurate_team" do
+    allow(@stat_tracker).to receive(:most).and_return(["24", 0.3347763347763348])
     expect(@stat_tracker.most_accurate_team("20132014")).to eq "Real Salt Lake"
+    allow(@stat_tracker).to receive(:most).and_return(["20", 0.32941176470588235])
     expect(@stat_tracker.most_accurate_team("20142015")).to eq "Toronto FC"
   end
 
   it "#least_accurate_team" do
+    allow(@stat_tracker).to receive(:least).and_return(["9", 0.2638888888888889])
     expect(@stat_tracker.least_accurate_team("20132014")).to eq "New York City FC"
+    allow(@stat_tracker).to receive(:least).and_return(["53", 0.2465034965034965])
     expect(@stat_tracker.least_accurate_team("20142015")).to eq "Columbus Crew SC"
   end
 
   it "#most_tackles" do
+    allow(@stat_tracker).to receive(:most).and_return(["26", 3691])
     expect(@stat_tracker.most_tackles("20132014")).to eq "FC Cincinnati"
+    allow(@stat_tracker).to receive(:most).and_return(["2", 3002])
     expect(@stat_tracker.most_tackles("20142015")).to eq "Seattle Sounders FC"
   end
 
   it "#fewest_tackles" do
+    allow(@stat_tracker).to receive(:fewest).and_return(["1", 1568])
     expect(@stat_tracker.fewest_tackles("20132014")).to eq "Atlanta United"
+    allow(@stat_tracker).to receive(:fewest).and_return(["30", 1594])
     expect(@stat_tracker.fewest_tackles("20142015")).to eq "Orlando City SC"
   end
 end
