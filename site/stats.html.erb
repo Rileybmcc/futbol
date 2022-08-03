@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>Your favorite Futbol stats!</title>
+      <link href="../site/minimal-table.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+
+      <h1>Futbol Stats From Data!</h1>
+
+      <h2>Game Stats</h2>
+
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Stat</th>
+        </tr>
+        <tr>
+          <td>#highest_total_score</td>
+          <td><%= highest_total_score %></td>
+        </tr>
+        <tr>
+          <td>#lowest_total_score</td>
+          <td><%= lowest_total_score %></td>
+        </tr>
+        <tr>
+          <td>#percentage_home_wins</td>
+          <td><%= percentage_home_wins %></td>
+        </tr>
+        <tr>
+          <td>#percentage_visitor_wins</td>
+          <td><%= percentage_visitor_wins %></td>
+        </tr>
+        <tr>
+          <td>#percentage_ties</td>
+          <td><%= percentage_ties %></td>
+        </tr>
+        <tr>
+          <td>#count_of_games_by_season</td>
+          <td><%= count_of_games_by_season %></td>
+        </tr>
+        <tr>
+          <td>#average_goals_per_game</td>
+          <td><%= average_goals_per_game %></td>
+        </tr>
+        <tr>
+          <td>#average_goals_by_season</td>
+          <td><%= average_goals_by_season %></td>
+        </tr>
+      </table>
+
+      <h2>League Stats</h2>
+
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Stat</th>
+        </tr>
+        <tr>
+          <td>#count_of_teams</td>
+          <td><%= count_of_teams %></td>
+        </tr>
+        <tr>
+          <td>#best_offense</td>
+          <td><%= best_offense %></td>
+        </tr>
+        <tr>
+          <td>#worst_offense</td>
+          <td><%= worst_offense %></td>
+        </tr>
+        <tr>
+          <td>#highest_scoring_visitor</td>
+          <td><%= highest_scoring_visitor %></td>
+        </tr>
+        <tr>
+          <td>#highest_scoring_home_team</td>
+          <td><%= highest_scoring_home_team %></td>
+        </tr>
+        <tr>
+          <td>#lowest_scoring_visitor</td>
+          <td><%= lowest_scoring_visitor %></td>
+        </tr>
+        <tr>
+          <td>#lowest_scoring_home_team</td>
+          <td><%= lowest_scoring_home_team %></td>
+        </tr>
+      </table>
+
+      <h2>Season Stats for the season of <%= erb_data[1] %></h2>
+
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Stat</th>
+        </tr>
+        <tr>
+          <td>#winningest_coach</td>
+          <td><%= winningest_coach(erb_data[1]) %></td>
+        </tr>
+        <tr>
+          <td>#worst_coach</td>
+          <td><%= worst_coach(erb_data[1]) %></td>
+        </tr>
+        <tr>
+          <td>#most_accurate_team</td>
+          <td><%= most_accurate_team(erb_data[1]) %></td>
+        </tr>
+        <tr>
+          <td>#least_accurate_team</td>
+          <td><%= least_accurate_team(erb_data[1]) %></td>
+        </tr>
+        <tr>
+          <td>#most_tackles</td>
+          <td><%= most_tackles(erb_data[1]) %></td>
+        </tr>
+        <tr>
+          <td>#fewest_tackles</td>
+          <td><%= fewest_tackles(erb_data[1]) %></td>
+        </tr>
+      </table>
+
+      <h2>Team Stats for <%= team_info(erb_data[0])["team_name"] %></h2>
+
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Stat</th>
+        </tr>
+        <tr>
+          <td>#team_info</td>
+          <td><%= team_info(erb_data[0]) %></td>
+        </tr>
+        <tr>
+          <td>#best_season</td>
+          <td><%= best_season(erb_data[0]) %></td>
+        </tr>
+        <tr>
+          <td>#worst_season</td>
+          <td><%= worst_season(erb_data[0]) %></td>
+        </tr>
+        <tr>
+          <td>#average_win_percentage</td>
+          <td><%= average_win_percentage(erb_data[0]) %></td>
+        </tr>
+        <tr>
+          <td>#most_goals_scored</td>
+          <td><%= most_goals_scored(erb_data[0]) %></td>
+        </tr>
+        <tr>
+          <td>#fewest_goals_scored</td>
+          <td><%= fewest_goals_scored(erb_data[0]) %></td>
+        </tr>
+        <tr>
+          <td>#favorite_opponent</td>
+          <td><%= favorite_opponent(erb_data[0]) %></td>
+        </tr>
+        <tr>
+          <td>#rival</td>
+          <td><%= rival(erb_data[0]) %></td>
+        </tr>
+      </table>
+    </body>
+  </html>

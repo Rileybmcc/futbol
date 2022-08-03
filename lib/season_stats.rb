@@ -1,38 +1,35 @@
 module SeasonStats
-
   def list_game_ids_by_season(season_desired)
     (@games.data.select { |game| game[:season] == season_desired }).map { |matchup| matchup[:game_id] }
-
   end
 
   def winningest_coach(season_desired)
-    coach_win_percentages_by_season(season_desired).max_by {|a, b| b }[0]
+    coach_win_percentages_by_season(season_desired).max_by {|_a, b| b }[0]
   end
 
   def worst_coach(season_desired)
-    coach_win_percentages_by_season(season_desired).min_by {|a, b| b }[0]
+    coach_win_percentages_by_season(season_desired).min_by {|_a, b| b }[0]
   end
 
   def most_accurate_team(season_desired)
-    wasd = team_accuracy(season_desired).max_by { |a, b| b }
-    (@teams.data.find { |this_team| this_team[:team_id] == wasd[0]})[:team_name]
+    most = team_accuracy(season_desired).max_by { |_a, b| b }
+    (@teams.data.find { |this_team| this_team[:team_id] == most[0]})[:team_name]
   end
 
   def least_accurate_team(season_desired)
-    johnny = team_accuracy(season_desired).min_by { |a, b| b }
-    (@teams.data.find { |this_team_1| this_team_1[:team_id] == johnny[0]})[:team_name]
+    least = team_accuracy(season_desired).min_by { |_a, b| b }
+    (@teams.data.find { |this_team_1| this_team_1[:team_id] == least[0]})[:team_name]
   end
 
 
   def most_tackles(season_desired)
-    bobby = total_tackles(season_desired).max_by { |a, b| b }
-    (@teams.data.find { |this_team_2| this_team_2[:team_id] == bobby[0]})[:team_name]
-
+    most = total_tackles(season_desired).max_by { |_a, b| b }
+    (@teams.data.find { |this_team_2| this_team_2[:team_id] == most[0]})[:team_name]
   end
 
   def fewest_tackles(season_desired)
-    bobby = total_tackles(season_desired).min_by { |_a, b| b }
-    (@teams.data.find { |this_team_3| this_team_3[:team_id] == bobby[0]})[:team_name]
+    fewest = total_tackles(season_desired).min_by { |_a, b| b }
+    (@teams.data.find { |this_team_3| this_team_3[:team_id] == fewest[0]})[:team_name]
   end
 
   private
@@ -47,7 +44,7 @@ module SeasonStats
       games_won[half[:head_coach]] += 1 if half[:result] == "WIN"
       games_won[half[:head_coach]] += 0 unless half[:result] == "WIN"
     end
-    games_won.keys.each { |key| games_played[key] = (games_won[key].to_f / games_played[key].to_f) * 100 }
+    games_won.keys.each { |key| games_played[key] = (games_won[key] / games_played[key].to_f) * 100 }
     games_played
   end
 
@@ -67,11 +64,8 @@ module SeasonStats
   def total_tackles(season_desired)
     team_tackles = Hash.new(0)
     placeholder = list_game_ids_by_season(season_desired)
-    orr = @game_teams.data.select { |thing| placeholder.include?(thing[:game_id]) }
-    orr.each do |period|
-      team_tackles[period[:team_id]] += period[:tackles].to_i
-    end
+    matching_games = @game_teams.data.select { |thing| placeholder.include?(thing[:game_id]) }
+    matching_games.each { |period| team_tackles[period[:team_id]] += period[:tackles].to_i }
     team_tackles
   end
-
 end
