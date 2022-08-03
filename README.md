@@ -3,7 +3,7 @@
 ### Iteration 1, 2, & 3
 * Everything should be good to go
 * Can be tested through spec/stat_tracker_spec or through the spec harness, both work.
-* Subclasses were implemented by Astrid with the thought that they could store frequently accessed pre-chunked bits of data to increase efficiency, but we found other solutions. Including them because they should be useful for further optimization.
+* Subclasses were implemented by Astrid with the thought that they could store frequently accessed pre-chunked bits of data to increase efficiency, but we found other solutions. Including them because they should be useful for further optimization. (Due date p.s.: we actually ended up using them to refactor to break the 5 sec testing barrier. they could be use more elegantly, but this works for now)
 * Subclass construction handled by the `TrackerForge` class and based off of the mold of parent class `DataMold`.
 
 ### Iteration 4
