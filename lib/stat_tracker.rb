@@ -4,7 +4,7 @@ require_relative './game_stats'
 require_relative './league_stats'
 require_relative './season_stats'
 require_relative './team_stats'
-require_relative './tracker_forge'
+require_relative './casts/tracker_forge'
 
 class StatTracker
   include GameStats
@@ -21,6 +21,10 @@ class StatTracker
 
   def self.from_csv(locations)
     StatTracker.new(locations)
+  end
+
+  def get_binding
+    binding 
   end
   
 end
